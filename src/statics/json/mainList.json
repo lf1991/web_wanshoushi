@@ -1,0 +1,22 @@
+{
+  "errcode": 0,
+  "message": "success",
+  "data": [
+    {
+      "title": "共修科目",
+      "caption": "阿弥陀佛...",
+      "icon": "school",
+      "router": "/Subject",
+      "id": 1,
+      "active": false
+    },
+    {
+      "title": "后台管理",
+      "caption": "管理员权限",
+      "icon": "school",
+      "router": "/admin",
+      "id": 2,
+      "active": false
+    }
+  ]
+}

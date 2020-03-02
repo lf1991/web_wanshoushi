@@ -1,0 +1,90 @@
+{
+  "errcode": 0,
+  "message": "success",
+  "data": [
+    {
+      "name": "阿弥陀佛圣号",
+      "subjectId": 1001,
+      "chapterId": 0,
+      "brief": "南无阿弥陀佛圣号唱诵"
+    },
+    {
+      "name": "地藏王菩萨圣号",
+      "subjectId": 1002,
+      "chapterId": 0,
+      "brief": "南无阿弥陀佛圣号唱诵"
+    },
+    {
+      "name": "观世音菩萨圣号",
+      "subjectId": 1003,
+      "chapterId": 0,
+      "brief": "南无阿弥陀佛圣号唱诵"
+    },
+    {
+      "name": "楞严咒",
+      "subjectId": 1004,
+      "chapterId": 0,
+      "brief": "南无阿弥陀佛圣号唱诵"
+    },
+    {
+      "name": "准提咒",
+      "subjectId": 1005,
+      "chapterId": 0,
+      "brief": "南无阿弥陀佛圣号唱诵"
+    },
+    {
+      "name": "阿弥陀经",
+      "subjectId": 1006,
+      "chapterId": 0,
+      "brief": "南无阿弥陀佛圣号唱诵"
+    },
+    {
+      "name": "金刚经",
+      "subjectId": 1007,
+      "chapterId": 0,
+      "brief": "南无阿弥陀佛圣号唱诵"
+    },
+    {
+      "name": "普门品",
+      "subjectId": 1008,
+      "chapterId": 0,
+      "brief": "南无阿弥陀佛圣号唱诵"
+    },
+    {
+      "name": "地藏经",
+      "subjectId": 1009,
+      "chapterId": 0,
+      "brief": "南无阿弥陀佛圣号唱诵"
+    },
+    {
+      "name": "药师经",
+      "subjectId": 1010,
+      "chapterId": 0,
+      "brief": "南无阿弥陀佛圣号唱诵"
+    },
+    {
+      "name": "无量寿经",
+      "subjectId": 1011,
+      "chapterId": 0,
+      "brief": "南无阿弥陀佛圣号唱诵"
+    },
+    {
+      "name": "地藏经",
+      "subjectId": 1009,
+      "chapterId": 0,
+      "brief": "南无阿弥陀佛圣号唱诵"
+    },
+    {
+      "name": "药师经",
+      "subjectId": 1010,
+      "chapterId": 0,
+      "brief": "南无阿弥陀佛圣号唱诵"
+    },
+    {
+      "name": "无量寿经",
+      "subjectId": 1011,
+      "chapterId": 0,
+      "brief": "南无阿弥陀佛圣号唱诵"
+    }
+  ]
+}
