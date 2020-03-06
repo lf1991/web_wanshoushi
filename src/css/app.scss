@@ -1,1 +1,51 @@
 // app global css in SCSS form
+._select_page .q-field__control {
+  height: 100% !important;
+  min-height: auto;
+  padding: 0;
+}
+
+._select_page .q-field__label {
+  top: 12px;
+}
+
+._select_page .q-field__native {
+  height: 100%;
+  min-height: auto;
+  overflow: hidden;
+}
+
+._select_page .q-field__append {
+  height: 100%;
+  min-height: auto;
+  padding-left: 0;
+}
+
+
+// app global css in SCSS form
+._fill_page .q-field__control {
+  height: 100% !important;
+  min-height: auto;
+  padding: 0;
+}
+
+._fill_page .q-field__label {
+  top: 12px;
+}
+
+._fill_page .q-field__native {
+  height: 100%;
+  min-height: auto;
+  overflow: hidden;
+}
+
+._fill_page .q-field__append {
+  height: 100%;
+  min-height: auto;
+  padding-left: 0;
+}
+
+
+._return_page .text-teal, .q-checkbox__inner {
+  color: #a15f19 !important;
+}

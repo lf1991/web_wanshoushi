@@ -2,7 +2,7 @@ const routes = [
     {
         path: '/',
         redirect: '/Login'
-    }, 
+    },
     {
         path: '/Login',
         component: () => import('layouts/LoginLayout.vue'),
@@ -11,10 +11,11 @@ const routes = [
         path: '/Main',
         component: () => import('layouts/MainLayout.vue'),
         children: [
-            {path: '', redirect: '/Subject'},
-            /*{path: '/home', component: () => import('pages/main/children/Home.vue')},*/
-            {path: '/Subject', component: () => import('pages/main/children/Subject.vue')},
-            {path: '/Admin', component: () => import('pages/main/children/Admin.vue')}
+            {path: '', redirect: '/Fill'},
+            {path: '/Select', component: () => import('pages/main/children/SubjectSelect.vue')},
+            {path: '/Fill', component: () => import('pages/main/children/DayFillIn.vue')},
+            {path: '/Admin', component: () => import('pages/main/children/Admin.vue')},
+            {path: '/Person', component: () => import('pages/main/children/PersonDetail.vue')}
         ]
     }
 ];

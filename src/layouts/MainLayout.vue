@@ -14,11 +14,11 @@
             </q-toolbar>
         </q-header>
 
-        <q-drawer
-                v-model="isLeftOpen"
-                show-if-above
-                bordered
-                content-class="bg-yellow-1"
+        <q-drawer style="width: 100px;"
+                  v-model="isLeftOpen"
+                  show-if-above
+                  bordered
+                  content-class="bg-yellow-1"
         >
             <MainList/>
         </q-drawer>
@@ -40,7 +40,7 @@
 
         data() {
             return {
-                isLeftOpen: false,
+                isLeftOpen: true,
             }
         }
     }
@@ -57,5 +57,7 @@
     ._nav_header {
         background: #532406;
         color: #FFFFFF;
+        height: 70px;
+        @include flex();
     }
 </style>
