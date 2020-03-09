@@ -11,7 +11,7 @@
                     <q-item-section avatar style="width: 65%;height:100%;padding: 0;">
                         <q-input style="width: 100%;height: 100%;"
                                  filled
-                                 v-model="name"
+                                 v-model="params.mageName"
                                  type="text"
                                  label="请输入您的姓名"
                                  lazy-rules
@@ -25,7 +25,8 @@
                         <q-item-label>签到日期</q-item-label>
                     </q-item-section>
                     <q-item-section avatar style="width: 65%;height:100%;padding: 0;">
-                        <q-input filled style="width: 100%;height:100%;" v-model="date" mask="date" :rules="['date']">
+                        <q-input filled style="width: 100%;height:100%;" v-model="params.fillDate" mask="date"
+                                 :rules="['date']">
                             <template v-slot:append>
                                 <q-icon name="event" class="cursor-pointer">
                                     <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
@@ -44,13 +45,13 @@
                     <q-item-section avatar style="width: 65%;height:100%;padding: 0;">
                         <div style="width: 100%;height:100%;padding: 0; display: flex;flex-direction: row;justify-content: space-between;">
                             <div style="height:100%;width: 68%;">
-                                <q-input style="width: 100%;height: 100%;" square filled v-model="text">
+                                <q-input style="width: 100%;height: 100%;" square filled v-model="params.subject1">
                                 </q-input>
                             </div>
                             <div style="height:100%;width: 30%;">
-                                <q-input style="width: 100%;height: 100%;" dense="true"
+                                <q-input style="width: 100%;height: 100%;"
                                          square filled
-                                         v-model="name"
+                                         v-model="params.times1"
                                          type="text"
                                          label="次数"
                                          lazy-rules
@@ -67,13 +68,13 @@
                     <q-item-section avatar style="width: 65%;height:100%;padding: 0;">
                         <div style="width: 100%;height:100%;padding: 0; display: flex;flex-direction: row;justify-content: space-between;">
                             <div style="height:100%;width: 68%;">
-                                <q-input style="width: 100%;height: 100%;" square filled v-model="text">
+                                <q-input style="width: 100%;height: 100%;" square filled v-model="params.subject2">
                                 </q-input>
                             </div>
                             <div style="height:100%;width: 30%;">
-                                <q-input style="width: 100%;height: 100%;" dense="true"
+                                <q-input style="width: 100%;height: 100%;"
                                          square filled
-                                         v-model="name"
+                                         v-model="params.times2"
                                          type="text"
                                          label="次数"
                                          lazy-rules
@@ -90,13 +91,13 @@
                     <q-item-section avatar style="width: 65%;height:100%;padding: 0;">
                         <div style="width: 100%;height:100%;padding: 0; display: flex;flex-direction: row;justify-content: space-between;">
                             <div style="height:100%;width: 68%;">
-                                <q-input style="width: 100%;height: 100%;" square filled v-model="text">
+                                <q-input style="width: 100%;height: 100%;" square filled v-model="params.subject3">
                                 </q-input>
                             </div>
                             <div style="height:100%;width: 30%;">
-                                <q-input style="width: 100%;height: 100%;" dense="true"
+                                <q-input style="width: 100%;height: 100%;"
                                          square filled
-                                         v-model="name"
+                                         v-model="params.times3"
                                          type="text"
                                          label="次数"
                                          lazy-rules
@@ -113,15 +114,15 @@
             </div>
             <div class="q-pa-md _fill_tips">共修排行榜</div>
             <div class="q-pa-md _fill_detail">
-                <div>共233333人</div>
-                <div class="_detail">综合详情</div>
+                <div>共2333人</div>
+                <div class="_detail" v-on:click="stepToTotal()">综合详情</div>
             </div>
             <div class="q-pa-md _fill_info" style="padding: 0px !important;">
                 <q-markup-table flat separator="none" style="background: #ebebe7">
                     <thead>
                     <tr>
                         <th class="text-left" v-for="(tt,index) in fillHeaders">
-                            {{tt}}
+                            <div>{{tt}}</div>
                         </th>
                     </tr>
                     </thead>
@@ -167,6 +168,16 @@
                 fillHeaders: ["No.", "法名/网名", "共修科目1", "共修科目2", "共修科目3", "详情"],
                 fillDetails: [],
                 isShowReturn: false,
+                params: {
+                    mageName: "",
+                    subject1: "",
+                    subject2: "",
+                    subject3: "",
+                    times1: "",
+                    times2: "",
+                    times3: "",
+                    fillDate: "",
+                }
             }
         },
         components: {MeritReturn},
@@ -208,9 +219,10 @@
              * @author: lifei
              * @date: 2020/2/23
              */
-            stepToDetail(item) {
-                let _this = this;
-                alert("fuck");
+            stepToTotal(item) {
+                this.$router.push({
+                    path: "/Total", query: {detail: item}
+                });
             },
             /**
              * @Description: 详情信息
@@ -219,7 +231,6 @@
              */
             stepToDetail(item) {
                 let _this = this;
-                this.$router.push({path: item.router});
                 _this.$router.push({
                     path: "/Person", query: {detail: item}
                 });
@@ -256,12 +267,12 @@
         height: 100%;
         color: #451E04;
         background: #ebebe7;
-        padding-bottom: 20px;
+
 
         ._fill_inner {
             width: 100%;
             height: 100%;
-            padding: 0;
+            padding: 20px 0px;
 
             @include flex(column, flex-start);
 
@@ -359,5 +370,11 @@
 
     th {
         font-size: 14px !important;
+
+        div {
+            width: 100%;
+            height: 100%;
+            @include flex();
+        }
     }
 </style>

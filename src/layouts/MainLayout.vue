@@ -40,7 +40,7 @@
 
         data() {
             return {
-                isLeftOpen: true,
+                isLeftOpen: false,
             }
         }
     }

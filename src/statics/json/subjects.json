@@ -67,24 +67,6 @@
       "subjectId": 1011,
       "chapterId": 0,
       "brief": "南无阿弥陀佛圣号唱诵"
-    },
-    {
-      "name": "地藏经",
-      "subjectId": 1009,
-      "chapterId": 0,
-      "brief": "南无阿弥陀佛圣号唱诵"
-    },
-    {
-      "name": "药师经",
-      "subjectId": 1010,
-      "chapterId": 0,
-      "brief": "南无阿弥陀佛圣号唱诵"
-    },
-    {
-      "name": "无量寿经",
-      "subjectId": 1011,
-      "chapterId": 0,
-      "brief": "南无阿弥陀佛圣号唱诵"
     }
   ]
 }

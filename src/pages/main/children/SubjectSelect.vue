@@ -9,7 +9,7 @@
                     <q-item-section avatar style="width: 65%;height:100%;padding: 0;">
                         <q-input style="width: 100%;height: 100%;"
                                  filled
-                                 v-model="name"
+                                 v-model="params.mageName"
                                  type="text"
                                  label="请输入您的姓名"
                                  lazy-rules
@@ -22,9 +22,9 @@
                         <q-item-label>订课期限</q-item-label>
                     </q-item-section>
                     <q-item-section avatar style="width: 65%;height:100%;padding: 0;">
-                        <q-radio v-model="shape" val="year" label="年"/>
-                        <q-radio v-model="shape" val="month" label="月"/>
-                        <q-radio v-model="shape" val="week" label="周"/>
+                        <q-radio v-model="params.selectType" val="year" label="年"/>
+                        <q-radio v-model="params.selectType" val="month" label="月"/>
+                        <q-radio v-model="params.selectType" val="week" label="周"/>
                     </q-item-section>
                 </q-item>
                 <q-item clickable tag="div">
@@ -34,7 +34,8 @@
                     <q-item-section avatar style="width: 65%;height:100%;padding: 0;">
                         <div style="width: 100%;height:100%;padding: 0; display: flex;flex-direction: row;justify-content: space-between;">
                             <div style="height:100%;width: 68%;">
-                                <q-input style="width: 100%;height: 100%;" square filled bottom-slots v-model="text"
+                                <q-input style="width: 100%;height: 100%;" square filled bottom-slots
+                                         v-model="params.subject1"
                                          label="名称">
                                     <template v-slot:append>
                                         <q-icon name="close" @click="text = ''" class="cursor-pointer"/>
@@ -44,7 +45,7 @@
                             <div style="height:100%;width: 30%;">
                                 <q-input style="width: 100%;height: 100%;"
                                          square filled
-                                         v-model="name"
+                                         v-model="params.target1"
                                          type="text"
                                          label="目标"
                                          lazy-rules
@@ -62,7 +63,8 @@
                     <q-item-section avatar style="width: 65%;height:100%;padding: 0;">
                         <div style="width: 100%;height:100%;padding: 0; display: flex;flex-direction: row;justify-content: space-between;">
                             <div style="height:100%;width: 68%;">
-                                <q-input style="width: 100%;height: 100%;" square filled bottom-slots v-model="text"
+                                <q-input style="width: 100%;height: 100%;" square filled bottom-slots
+                                         v-model="params.subject2"
                                          label="名称">
                                     <template v-slot:append>
                                         <q-icon name="close" @click="text = ''" class="cursor-pointer"/>
@@ -72,7 +74,7 @@
                             <div style="height:100%;width: 30%;">
                                 <q-input style="width: 100%;height: 100%;"
                                          square filled
-                                         v-model="name"
+                                         v-model="params.target2"
                                          type="text"
                                          label="目标"
                                          lazy-rules
@@ -90,7 +92,7 @@
                     <q-item-section avatar style="width: 65%;height:100%;padding: 0;">
                         <div style="width: 100%;height:100%;padding: 0; display: flex;flex-direction: row;justify-content: space-between;">
                             <div style="height:100%;width: 68%;">
-                                <q-input style="width: 100%;height: 100%;" square filled v-model="text"
+                                <q-input style="width: 100%;height: 100%;" square filled v-model="params.subject3"
                                          label="名称">
                                     <template v-slot:append>
                                         <q-icon name="close" @click="text = ''"/>
@@ -98,9 +100,9 @@
                                 </q-input>
                             </div>
                             <div style="height:100%;width: 30%;">
-                                <q-input style="width: 100%;height: 100%;" dense="true"
+                                <q-input style="width: 100%;height: 100%;"
                                          square filled
-                                         v-model="name"
+                                         v-model="params.target3"
                                          type="text"
                                          label="目标"
                                          lazy-rules
@@ -118,15 +120,18 @@
                     <q-item-section avatar style="width: 65%;height:100%;padding: 0;">
                         <div style="width: 100%;height:100%;padding: 0; display: flex;flex-direction: row;justify-content: space-between;">
                             <div style="height:100%;width: 33%;">
-                                <q-select style="height: 100%;" square filled v-model="model" :options="options"
+                                <q-select style="height: 100%;" square filled v-model="params.province"
+                                          :options="provinceOptions"
                                           label="省"/>
                             </div>
                             <div style="height:100%;width: 33%;">
-                                <q-select style="height: 100%;" square filled v-model="model" :options="options"
+                                <q-select style="height: 100%;" square filled v-model="params.city"
+                                          :options="cityOptions"
                                           label="市"/>
                             </div>
                             <div style="height:100%;width: 33%;">
-                                <q-select style="height: 100%;" square filled v-model="model" :options="options"
+                                <q-select style="height: 100%;" square filled v-model="params.county"
+                                          :options="countyOptions"
                                           label="县"/>
                             </div>
                         </div>
@@ -138,21 +143,9 @@
                 常修科目选择<span style="font-size: 12px;"> &nbsp; (限制选择三项)</span>
             </div>
             <div class="q-pa-md flex row _select_info">
-
-                <!-- <div class="q-gutter-sm">
-                     <q-input filled v-model="date" mask="date" :rules="['date']">
-                         <template v-slot:append>
-                             <q-icon name="event" class="cursor-pointer">
-                                 <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                                     <q-date v-model="date" @input="() => $refs.qDateProxy.hide()"></q-date>
-                                 </q-popup-proxy>
-                             </q-icon>
-                         </template>
-                     </q-input>
-                 </div>-->
                 <div class="q-gutter-sm" style="width:50%;">
                     <q-list>
-                        <q-item v-for="(item,index) in subjectList" tag="label" v-ripple>
+                        <q-item v-for="(item,index) in subjectList1" tag="label" v-ripple>
                             <q-item-section avatar>
                                 <q-checkbox v-model="subjecSelects" :val="item.subjectId" color="teal"></q-checkbox>
                             </q-item-section>
@@ -164,7 +157,7 @@
                 </div>
                 <div class="q-gutter-sm" style="width:50%;">
                     <q-list>
-                        <q-item v-for="(item,index) in subjectList" tag="label" v-ripple>
+                        <q-item v-for="(item,index) in subjectList2" tag="label" v-ripple>
                             <q-item-section avatar>
                                 <q-checkbox v-model="subjecSelects" :val="item.subjectId" color="teal"></q-checkbox>
                             </q-item-section>
@@ -174,17 +167,14 @@
                         </q-item>
                     </q-list>
                 </div>
-                <!--div class="q-pa-md flex flex-center">
-                    <q-btn class="_button" style="width: 90%;font-size: 20px;" color="secondary" label="提交"
-                           v-on:click="doSubmit()"></q-btn>
-                </div>-->
             </div>
 
             <div class="q-pa-md _select_tips">
                 后台留言
             </div>
             <div class="q-pa-md flex row _select_info" style="padding:0;">
-                <textarea style="width: 100%;height: 100%;height: 100px;background: #EBECE7;" type="text" v-model="text"
+                <textarea style="width: 100%;height: 100%;height: 100px;background: #EBECE7;" type="text"
+                          v-model="leaveMessage"
                           placeholder="请输入您的留言" maxlength="2000"/>
             </div>
         </div>
@@ -202,6 +192,8 @@
             return {
                 subjecSelects: [],
                 subjectList: [],
+                subjectList1: [],
+                subjectList2: [],
                 name: null,
                 age: null,
                 accept: false,
@@ -209,7 +201,24 @@
                 shape: "line",
                 options: ["f1", "f2", "f3", "f4", "f5", "f6"],
                 model: "f2",
-                text: ""
+                text: "",
+                params: {
+                    mageName: "",
+                    selectType: "",
+                    subject1: "",
+                    target1: "",
+                    subject2: "",
+                    target2: "",
+                    subject3: "",
+                    target3: "",
+                    province: "",
+                    city: "",
+                    county: ""
+                },
+                provinceOptions: [],
+                cityOptions: [],
+                countyOptions: [],
+                leaveMessage: ""
             }
         },
         watch: {
@@ -251,6 +260,10 @@
              */
             initSubjectList() {
                 let _this = this;
+                _this.subjectList.map((item, index) => {
+                    if (index % 2 == 0) _this.subjectList1.push(item);
+                    else _this.subjectList2.push(item);
+                })
             },
 
             /**
@@ -283,6 +296,7 @@
     ._select_page {
         width: 100%;
         height: 100%;
+        margin-bottom: 20px;
         color: #451E04;
 
         ._select_inner {

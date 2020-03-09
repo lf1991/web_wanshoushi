@@ -49,3 +49,27 @@
 ._return_page .text-teal, .q-checkbox__inner {
   color: #a15f19 !important;
 }
+
+
+// app global css in SCSS form
+._subjecthandler_page .q-field__control {
+  height: 100% !important;
+  min-height: auto;
+  padding: 0;
+}
+
+._subjecthandler_page .q-field__label {
+  top: 12px;
+}
+
+._subjecthandler_page .q-field__native {
+  height: 100%;
+  min-height: auto;
+  overflow: hidden;
+}
+
+._subjecthandler_page .q-field__append {
+  height: 100%;
+  min-height: auto;
+  padding-left: 0;
+}
