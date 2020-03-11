@@ -49,7 +49,7 @@ module.exports = function (ctx) {
 
             // Quasar plugins
             plugins: [
-                'AppFullscreen', 'BottomSheet'
+                'AppFullscreen', 'BottomSheet','Notify'
             ]
         },
 

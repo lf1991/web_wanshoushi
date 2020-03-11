@@ -12,7 +12,7 @@
                                     <q-checkbox v-model="returnSelects" :val="item.id" color="teal"></q-checkbox>
                                 </q-item-section>
                                 <q-item-section>
-                                    <q-item-label>{{item.label}}</q-item-label>
+                                    <q-item-label>{{item.name}}</q-item-label>
                                 </q-item-section>
                             </q-item>
                         </q-list>
@@ -24,7 +24,7 @@
                                     <q-checkbox v-model="returnSelects" :val="item.id" color="teal"></q-checkbox>
                                 </q-item-section>
                                 <q-item-section>
-                                    <q-item-label>{{item.label}}</q-item-label>
+                                    <q-item-label>{{item.name}}</q-item-label>
                                 </q-item-section>
                             </q-item>
                         </q-list>
@@ -60,7 +60,7 @@
         name: 'ReturnPage',
         data() {
             return {
-                meritDesc: "",
+                meritDesc: "愿以此功德,庄严佛净土\n上报四重恩,下济三途苦\n若有此见闻,悉发菩提心\n尽此一报身,同生极乐园",
                 meritTips: "",
                 returnList: [],
                 returnList1: [],
@@ -73,7 +73,7 @@
         mounted() {
             let _this = this;
             _this.init();
-            _this.initMeritDesc();
+
         },
         props: {
             isShow: {
@@ -94,15 +94,19 @@
         methods: {
             init() {
                 let _this = this;
+                _this.initMeritList();
+                _this.initMeritDesc();
+            },
+            initMeritList() {
+                let _this = this;
                 _this.$axios.get(_URL.QUERY_MERIT_RETURN).then(res => {
-                    if (!res || !res.data || res.data["errcode"] != 0 || !res.data["data"]) return;
-                    let resTT = res.data["data"];
-                    _this.returnList = resTT["meritReturn"];
+                    if (!res || !res.data || !res.data || !res.data["data"] || res.data["errcode"] != 0) return;
+                    _this.returnList = res.data["data"];
                     _this.returnList.map((item, index) => {
                         if (index % 2 != 0) _this.returnList1.push(item);
                         else _this.returnList2.push(item);
                     });
-                    _this.meritDesc = resTT["meritDesc"].replace(new RegExp(",", "g"), "  ");
+                    _this.meritDesc = _this.meritDesc.replace(new RegExp(",", "g"), "  ");
                 }).catch(err => {
                     //do nothong
                 });

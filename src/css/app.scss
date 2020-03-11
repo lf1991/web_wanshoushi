@@ -73,3 +73,18 @@
   min-height: auto;
   padding-left: 0;
 }
+
+
+._returnhandler_page .q-field__control {
+  height: 100% !important;
+  min-height: auto;
+  padding: 0;
+}
+
+._returnhandler_page .q-field__label {
+  top: 12px;
+}
+
+.q-field__native {
+  color: #fff;
+}

@@ -7,68 +7,39 @@
                 <div class="q-gutter-y-md _handler_contetnt">
                     <q-item clickable tag="div">
                         <q-item-section avatar style="width: 30%;">
-                            <q-item-returnName>回向名称</q-item-returnName>
+                            <q-item-label>新增回向</q-item-label>
                         </q-item-section>
                         <q-item-section avatar style="width: 70%;height:100%;padding: 0;">
                             <q-input style="width: 100%;height: 100%;"
                                      filled
-                                     v-model="params.subjectName"
+                                     v-model="params.name"
                                      type="text"
-                                     returnName="请输入回向名称"
-                            ></q-input>
-                        </q-item-section>
-                    </q-item>
-
-                    <q-item clickable tag="div">
-                        <q-item-section avatar style="width: 30%;">
-                            <q-item-returnName>回向名称</q-item-returnName>
-                        </q-item-section>
-                        <q-item-section avatar style="width: 70%;height:100%;padding: 0;">
-                            <q-input style="width: 100%;height: 100%;"
-                                     filled
-                                     v-model="params.subjectName"
-                                     type="text"
-                                     returnName="请输入回向名称"
-                            ></q-input>
-                        </q-item-section>
-                    </q-item>
-
-                    <q-item clickable tag="div">
-                        <q-item-section avatar style="width: 30%;">
-                            <q-item-returnName>回向名称</q-item-returnName>
-                        </q-item-section>
-                        <q-item-section avatar style="width: 70%;height:100%;padding: 0;">
-                            <q-input style="width: 100%;height: 100%;"
-                                     filled
-                                     v-model="params.subjectName"
-                                     type="text"
-                                     returnName="请输入回向名称"
                             ></q-input>
                         </q-item-section>
                     </q-item>
                 </div>
                 <div class="_submit_">
-                    <q-btn class="_submit_button" label="回向新增" v-on:click="stepToAdd()"/>
+                    <q-btn class="_submit_button" label="新增回向" v-on:click="stepToAddMetrit()"/>
                 </div>
             </div>
             <div class="q-pa-md _handler_info" style="margin-top: 20px !important;">
-                <div class="q-gutter-y-md _handler_title">当前回向列表</div>
+                <div class="q-gutter-y-md _handler_title">回向管理</div>
                 <div class="q-gutter-y-md _handler_contetnt">
                     <q-markup-table flat separator="none" style="background: #ebebe7;width: 99%;">
                         <thead>
                         <tr>
-                            <th class="text-left" v-for="(tt,index) in returnHeaders">
+                            <th class="text-left" v-for="(tt,index) in meritsHeaders">
                                 <div>{{tt}}</div>
                             </th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="(item,index) in returntList">
+                        <tr v-for="(item,index) in meritsList">
                             <td class="text-left">
                                 <div> {{item.no}}</div>
                             </td>
                             <td class="text-left">
-                                <div>{{item.returnName}}</div>
+                                <div>{{item.name}}</div>
                             </td>
                             <td class="text-left" style="color:#532406;">
                                 <div>
@@ -82,72 +53,61 @@
                 </div>
             </div>
         </div>
+
+        <q-dialog v-model="isShowEdit" persistent transition-show="rotate" transition-hide="rotate">
+            <q-card style="min-width: 350px;">
+                <q-card-section>
+                    <div class="text-h5">"{{currentItem.name}}" 修改为:</div>
+                </q-card-section>
+                <q-card-section class="q-pt-none">
+                    <q-input dense v-model="fixedName" autofocus @keyup.enter="prompt = false"/>
+                </q-card-section>
+
+                <q-card-actions align="right" class="text-primary">
+                    <q-btn flat label="取消" class="bg-white text-dark" @click="stepToCancle()"/>
+                    <q-btn flat label="修改" class="bg-white text-cyan" @click="stepToFixMerit()"/>
+                </q-card-actions>
+            </q-card>
+        </q-dialog>
+
+        <q-dialog v-model="isShowDelete" persistent>
+            <q-card style="min-width: 350px">
+                <q-card-section>
+                    <div class="text-h6">确认删除该条回向数据:</div>
+                </q-card-section>
+                <q-card-section>
+                    <div class="text-h5" style="padding-left: 50px;">{{currentItem.name}}</div>
+                </q-card-section>
+                <q-card-actions align="right">
+                    <q-btn flat label="取消" class="bg-white text-dark" @click="stepToCancle()"/>
+                    <q-btn flat label="删除" class="bg-white text-cyan" @click="stepToDeleteMerit()"/>
+                </q-card-actions>
+            </q-card>
+        </q-dialog>
     </q-page>
 </template>
 
 <script>
+
+    import {_URL} from "../../../../api/js/_url";
+
     export default {
         name: 'SubjectHandlerPage',
         data() {
             return {
+                isShowEdit: false,
+                isShowDelete: false,
+                currentItem: {},
                 params: {
-                    subjectName: "",
-
+                    name: "",
                 },
-                returnHeaders: ["No.", "回向名称", "编辑"],
-                returntList: [
-                    {
-                        "no": 1,
-                        "id": 1001,
-                        "returnName": "回向法界众生",
-                        "edit": "编辑"
-                    },
-                    {
-                        "no": 2,
-                        "id": 1002,
-                        "returnName": "回向累世父母",
-                        "edit": "编辑"
-                    },
-                    {
-                        "no": 3,
-                        "id": 1003,
-                        "returnName": "回向冤情债主",
-                        "edit": "编辑"
-                    },
-                    {
-                        "no": 4,
-                        "id": 1004,
-                        "returnName": "回向常住三宝",
-                        "edit": "编辑"
-                    },
-                    {
-                        "no": 5,
-                        "id": 1005,
-                        "returnName": "回向诸天护法",
-                        "edit": "编辑"
-                    },
-                    {
-                        "no": 6,
-                        "id": 1006,
-                        "returnName": "回向堕胎婴灵",
-                        "edit": "编辑"
-                    },
-                    {
-                        "no": 7,
-                        "id": 1007,
-                        "returnName": "回向六道众生",
-                        "edit": "编辑"
-                    },
-                    {
-                        "no": 8,
-                        "id": 1008,
-                        "returnName": "回向六亲眷属",
-                        "edit": "编辑"
-                    }
-                ]
+                fixedName: "",
+                meritsHeaders: ["No.", "回向名称", "编辑"],
+                meritsList: []
             }
         },
         mounted() {
+            this.init();
         },
         methods: {
 
@@ -158,24 +118,69 @@
              */
             init() {
                 let _this = this;
-                _this.initMoudleList();
+                _this.initMeritsList();
             },
 
             /**
-             * @Description: 初始化模块
+             * @Description: 初始功德回向数据
              * @author: lifei
              * @date: 2020/3/8
              */
-            initMoudleList() {
+            initMeritsList() {
                 let _this = this;
+                _this.$axios.get(_URL.QUERY_MERIT_RETURN).then((res) => {
+                    let dataTT = res.data;
+                    if (dataTT.errode != 0 && !dataTT.data) return;
+                    debugger;
+                    //_this.meritsList = dataTT.data["meritReturn"];
+                    _this.meritsList = dataTT.data;
+                    _this.meritsList.map((item, index) => {
+                        item["no"] = index + 1;
+                        item["edit"] = "编辑";
+                    });
+                }).catch(() => {
+
+                })
             },
             /**
              * @Description: 科目新增
              * @author: lifei
              * @date: 2020/3/8
              */
-            stepToAdd() {
+            stepToAddMetrit() {
                 let _this = this;
+                if (!_this.params["name"]) {
+                    _this.notify({
+                        message: "请输入正确的回向名称",
+                        type: "info",
+                        color: "deep-orange-10"
+                    });
+                    return;
+                }
+                _this.$axios.post(_URL.INSERT_MERIT_RETURN, _this.params).then((res) => {
+                    if (res.data["data"] == 1) {
+                        if (res.data["errcode"] == 0) {
+                            _this.notify({
+                                message: "新增成功",
+                                type: "info",
+                                color: "teal-5"
+                            });
+                            _this.initMeritsList();
+                        } else {
+                            _this.notify({
+                                message: "新增失败",
+                                type: "info",
+                                color: "deep-orange-10"
+                            });
+                        }
+                    }
+                }).catch(() => {
+                    _this.notify({
+                        message: "修改失败",
+                        type: "info",
+                        color: "deep-orange-10"
+                    });
+                })
             },
 
             /**
@@ -183,12 +188,103 @@
              * @author: lifei
              * @date: 2020/3/9
              */
-            stepToEdit() {
-                alert("edit");
+            stepToEdit(item) {
+                let _this = this;
+                _this.isShowEdit = true;
+                _this.currentItem = item;
             },
 
-            stepToDelete() {
-                alert("delete");
+            stepToDelete(item) {
+                let _this = this;
+                _this.isShowDelete = true;
+                _this.currentItem = item;
+            },
+
+            stepToFixMerit() {
+                let _this = this;
+                if (!_this.fixedName) {
+                    _this.notify({
+                        message: "请输入正确的回向名称",
+                        type: "info",
+                        color: "deep-orange-10"
+                    });
+                    return;
+                }
+                _this.$axios.post(_URL.UPDATE_MERIT_RETURN, {
+                    id: _this.currentItem["id"],
+                    name: _this.fixedName
+                }).then((res) => {
+                    if (res.data["data"] == 1) {
+                        _this.notify({
+                            message: "修改成功",
+                            type: "info",
+                            color: "teal-5"
+                        });
+                        _this.initMeritsList();
+                        _this.isShowEdit = false;
+                    } else {
+                        _this.notify({
+                            message: "修改失败",
+                            type: "info",
+                            color: "deep-orange-10"
+                        });
+                    }
+                }).catch(() => {
+                    _this.notify({
+                        message: "修改失败",
+                        type: "info",
+                        color: "deep-orange-10"
+                    });
+                })
+            },
+
+            stepToDeleteMerit() {
+                let _this = this;
+                _this.$axios.post(_URL.DELETE_MERIT_RETURN, _this.currentItem).then((res) => {
+                    if (res.data["data"] == 1) {
+                        _this.notify({
+                            message: "删除成功",
+                            type: "info",
+                            color: "teal-5"
+                        });
+                        _this.isShowDelete = false;
+                        _this.initMeritsList();
+                    } else {
+                        _this.notify({
+                            message: "删除失败",
+                            type: "info",
+                            color: "deep-orange-10"
+                        });
+                    }
+                }).catch(() => {
+                    _this.notify({
+                        message: "删除失败",
+                        type: "info",
+                        color: "deep-orange-10"
+                    });
+                })
+            },
+            /**
+             * @Description: 弹框取消
+             * @author: lifei
+             * @date: 2020/3/12
+             */
+            stepToCancle() {
+                let _this = this;
+                _this.isShowEdit = false;
+                _this.isShowDelete = false;
+            },
+
+            notify(options) {
+                let _this = this;
+                _this.$q.notify({
+                    message: options["message"], //`请输入正确的回向名称`,
+                    timeout: 4000, // 以毫秒为单位; 0意味着没有超时
+                    type: options["type"], //'info',
+                    color: options["color"],//'deep-orange-10',
+                    textColor: '#A14407', // 如果默认的“white”不适合
+                    position: 'top', // 'top', 'left', 'bottom-left'等
+                });
             }
         }
     }
@@ -257,6 +353,10 @@
                 }
             }
         }
+
+        ._edit_merit {
+            background: red;
+        }
     }
 
 
@@ -299,10 +399,13 @@
         padding-bottom: 0px;
     }
 
-    .q-field__returnName {
+    .q-field__label {
         top: 12px;
     }
 
+    .q-field--filled .q-field__control {
+        height: 100%;
+    }
 
     tr {
 
@@ -333,6 +436,16 @@
 
     .q-table {
         width: 98%;
+    }
+
+    .q-card {
+        background: #8a3114;
+        color: #fff;
+
+        input {
+            color: #fff !important;
+        }
+
     }
 
 

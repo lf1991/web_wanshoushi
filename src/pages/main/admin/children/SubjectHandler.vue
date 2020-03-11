@@ -65,14 +65,11 @@
                                 <div> {{item.no}}</div>
                             </td>
                             <td class="text-left">
-                                <div>{{item.subjectName}}</div>
+                                <div>{{item.name}}</div>
                             </td>
                             <td class="text-left">
                                 <div>{{item.unit}}</div>
                             </td>
-                            <!-- <td class="text-left">
-                                 <div>{{item.fixedTime}}</div>
-                             </td>-->
                             <td class="text-left" style="color:#532406;">
                                 <div>
                                     <div style="cursor: pointer;" v-on:click="stepToEdit(item)">编辑</div>
@@ -89,6 +86,9 @@
 </template>
 
 <script>
+
+    import {_URL} from "../../../../api/js/_url";
+
     export default {
         name: 'SubjectHandlerPage',
         data() {
@@ -98,68 +98,11 @@
 
                 },
                 subjectHeaders: ["No.", "科目名称", "单位", "编辑"],
-                subjectList: [
-                    {
-                        no: 1,
-                        subjectName: "金刚经",
-                        fixedTime: "20190608",
-                        unit: "卷",
-                        edit: "编辑"
-                    },
-                    {
-                        no: 1,
-                        subjectName: "金刚经",
-                        fixedTime: "20190608",
-                        unit: "卷",
-                        edit: "编辑"
-                    },
-                    {
-                        no: 1,
-                        subjectName: "金刚经",
-                        fixedTime: "20190608",
-                        unit: "卷",
-                        edit: "编辑"
-                    },
-                    {
-                        no: 1,
-                        subjectName: "金刚经",
-                        fixedTime: "20190608",
-                        unit: "卷",
-                        edit: "编辑"
-                    },
-                    {
-                        no: 1,
-                        subjectName: "金刚经",
-                        fixedTime: "20190608",
-                        unit: "卷",
-                        edit: "编辑"
-                    },
-                    {
-                        no: 1,
-                        subjectName: "金刚经",
-                        fixedTime: "20190608",
-                        unit: "卷",
-                        edit: "编辑"
-                    },
-                    {
-                        no: 1,
-                        subjectName: "金刚经",
-                        fixedTime: "20190608",
-                        unit: "卷",
-                        edit: "编辑"
-                    },
-                    {
-                        no: 1,
-                        subjectName: "金刚经",
-                        fixedTime: "20190608",
-                        unit: "卷",
-                        edit: "编辑"
-                    }
-                ],
-
+                subjectList: []
             }
         },
         mounted() {
+            this.init();
         },
         methods: {
 
@@ -180,6 +123,22 @@
              */
             initMoudleList() {
                 let _this = this;
+                _this.$axios.get(_URL.QUERY_SUBJECT_LIST).then((res) => {
+                    let dataTT = res.data;
+                    if (dataTT.errode != 0 && !dataTT.data) return;
+                    _this.subjectList = dataTT.data;
+                    _this.subjectList.map((item, index) => {
+                        item["no"] = index + 1;
+                        item["edit"] = "编辑";
+                    })
+                }).catch(() => {
+                    _this.$q.notify({
+                        color: 'negative',
+                        position: 'top',
+                        message: 'Loading failed',
+                        icon: 'request ${_URL.QUERY_SUBJECT_LIST} is error'
+                    })
+                })
             },
             /**
              * @Description: 科目新增

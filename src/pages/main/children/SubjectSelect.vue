@@ -147,7 +147,7 @@
                     <q-list>
                         <q-item v-for="(item,index) in subjectList1" tag="label" v-ripple>
                             <q-item-section avatar>
-                                <q-checkbox v-model="subjecSelects" :val="item.subjectId" color="teal"></q-checkbox>
+                                <q-checkbox v-model="subjecSelects" :val="item.id" color="teal"></q-checkbox>
                             </q-item-section>
                             <q-item-section>
                                 <q-item-label>{{item.name}}</q-item-label>
@@ -159,7 +159,7 @@
                     <q-list>
                         <q-item v-for="(item,index) in subjectList2" tag="label" v-ripple>
                             <q-item-section avatar>
-                                <q-checkbox v-model="subjecSelects" :val="item.subjectId" color="teal"></q-checkbox>
+                                <q-checkbox v-model="subjecSelects" :val="item.id" color="teal"></q-checkbox>
                             </q-item-section>
                             <q-item-section>
                                 <q-item-label>{{item.name}}</q-item-label>
@@ -241,7 +241,7 @@
                 let _this = this;
                 _this.$axios.get(_URL.QUERY_SUBJECT_LIST).then((res) => {
                     let dataTT = res.data;
-                    if (dataTT.errcode != 0 && !dataTT.data) return;
+                    if (dataTT.errode != 0 && !dataTT.data) return;
                     _this.subjectList = dataTT.data;
                     _this.initSubjectList();
                 }).catch(() => {
