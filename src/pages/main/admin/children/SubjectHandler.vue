@@ -7,40 +7,43 @@
                 <div class="q-gutter-y-md _handler_contetnt">
                     <q-item clickable tag="div">
                         <q-item-section avatar style="width: 30%;">
-                            <q-item-label>科目名称</q-item-label>
+                            <q-item-label>课目名称</q-item-label>
                         </q-item-section>
                         <q-item-section avatar style="width: 70%;height:100%;padding: 0;">
                             <q-input style="width: 100%;height: 100%;"
                                      filled
-                                     v-model="params.subjectName"
+                                     v-model="params.name"
                                      type="text"
-                                     label="请输入科目名称"
+                                     label="请输入课目名称"
                             ></q-input>
                         </q-item-section>
                     </q-item>
 
                     <q-item clickable tag="div">
                         <q-item-section avatar style="width: 30%;">
-                            <q-item-label>科目简介</q-item-label>
+                            <q-item-label>课目简介</q-item-label>
                         </q-item-section>
                         <q-item-section avatar style="width: 70%;height:100%;padding: 0;">
                             <q-input style="width: 100%;height: 100%;"
                                      filled
-                                     v-model="params.subjectName"
+                                     v-model="params.brief"
                                      type="text"
-                                     label="请输入科目名称"
+                                     label="请输入课目名称"
                             ></q-input>
                         </q-item-section>
                     </q-item>
 
                     <q-item clickable tag="div">
                         <q-item-section avatar style="width: 30%;">
-                            <q-item-label>科目单位</q-item-label>
+                            <q-item-label>课目单位</q-item-label>
                         </q-item-section>
                         <q-item-section avatar style="width: 70%;height:100%;padding: 0;">
-                            <q-select style="height: 100%;width: 100%;" square filled v-model="params.province"
-                                      :options="[1,2,3,4,5,6,7,8,9]"
-                                      label="单位"/>
+                            <q-input style="width: 100%;height: 100%;"
+                                     filled
+                                     v-model="params.unit"
+                                     type="text"
+                                     label="请输入课目单位"
+                            ></q-input>
                         </q-item-section>
                     </q-item>
                 </div>
@@ -94,11 +97,12 @@
         data() {
             return {
                 params: {
-                    subjectName: "",
-
+                    name: "",
+                    unit: "",
+                    brief: ""
                 },
                 subjectHeaders: ["No.", "科目名称", "单位", "编辑"],
-                subjectList: []
+                subjectList: [],
             }
         },
         mounted() {
@@ -114,6 +118,7 @@
             init() {
                 let _this = this;
                 _this.initMoudleList();
+                _this.initUnitOptions();
             },
 
             /**
@@ -140,6 +145,7 @@
                     })
                 })
             },
+
             /**
              * @Description: 科目新增
              * @author: lifei
@@ -147,6 +153,41 @@
              */
             stepToAdd() {
                 let _this = this;
+                //参数校验
+                if (!_this.params["name"] || !_this.params["unit"]) {
+                    _this.notify({
+                        message: "请输入正确的回向名称或回向单位",
+                        type: "info",
+                        color: "deep-orange-10"
+                    });
+                    return;
+                }
+
+                _this.$axios.post(_URL.insertSubject, _this.params).then((res) => {
+                    if (res.data["data"] == 1) {
+                        if (res.data["errcode"] == 0) {
+                            _this.notify({
+                                message: "新增成功",
+                                type: "info",
+                                color: "teal-5"
+                            });
+                            _this.initMoudleList();
+                        } else {
+                            _this.notify({
+                                message: "新增失败",
+                                type: "info",
+                                color: "deep-orange-10"
+                            });
+                        }
+                    }
+                }).catch(() => {
+                    _this.notify({
+                        message: "修改失败",
+                        type: "info",
+                        color: "deep-orange-10"
+                    });
+                })
+
             },
 
             /**
@@ -160,6 +201,18 @@
 
             stepToDelete() {
                 alert("delete");
+            },
+
+            notify(options) {
+                let _this = this;
+                _this.$q.notify({
+                    message: options["message"], //`请输入正确的回向名称`,
+                    timeout: 4000, // 以毫秒为单位; 0意味着没有超时
+                    type: options["type"], //'info',
+                    color: options["color"],//'deep-orange-10',
+                    textColor: '#A14407', // 如果默认的“white”不适合
+                    position: 'top', // 'top', 'left', 'bottom-left'等
+                });
             }
         }
     }

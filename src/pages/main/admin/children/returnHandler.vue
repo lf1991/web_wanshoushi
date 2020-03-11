@@ -441,11 +441,6 @@
     .q-card {
         background: #8a3114;
         color: #fff;
-
-        input {
-            color: #fff !important;
-        }
-
     }
 
 
