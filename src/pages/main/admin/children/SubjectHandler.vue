@@ -85,6 +85,37 @@
                 </div>
             </div>
         </div>
+
+        <q-dialog v-model="isShowEdit" persistent transition-show="rotate" transition-hide="rotate">
+            <q-card style="min-width: 350px;">
+                <q-card-section>
+                    <div class="text-h5">"{{currentItem.name}}" 修改为:</div>
+                </q-card-section>
+                <q-card-section class="q-pt-none">
+                    <q-input dense v-model="fixedName" autofocus @keyup.enter="prompt = false"/>
+                </q-card-section>
+
+                <q-card-actions align="right" class="text-primary">
+                    <q-btn flat label="取消" class="bg-white text-dark" @click="stepToCancle()"/>
+                    <q-btn flat label="修改" class="bg-white text-cyan" @click="stepToFixSubject()"/>
+                </q-card-actions>
+            </q-card>
+        </q-dialog>
+
+        <q-dialog v-model="isShowDelete" persistent>
+            <q-card style="min-width: 350px">
+                <q-card-section>
+                    <div class="text-h6">确认删除该条课目数据:</div>
+                </q-card-section>
+                <q-card-section>
+                    <div class="text-h5" style="padding-left: 50px;">{{currentItem.name}}</div>
+                </q-card-section>
+                <q-card-actions align="right">
+                    <q-btn flat label="取消" class="bg-white text-dark" @click="stepToCancle()"/>
+                    <q-btn flat label="删除" class="bg-white text-cyan" @click="stepToDeleteSubject()"/>
+                </q-card-actions>
+            </q-card>
+        </q-dialog>
     </q-page>
 </template>
 
@@ -103,6 +134,13 @@
                 },
                 subjectHeaders: ["No.", "科目名称", "单位", "编辑"],
                 subjectList: [],
+                isShowEdit: false,
+                isShowDelete: false,
+                fixedName: "",
+                currentItem: {
+                    name: "",
+                    id: ""
+                }
             }
         },
         mounted() {
@@ -118,7 +156,6 @@
             init() {
                 let _this = this;
                 _this.initMoudleList();
-                _this.initUnitOptions();
             },
 
             /**
@@ -137,12 +174,11 @@
                         item["edit"] = "编辑";
                     })
                 }).catch(() => {
-                    _this.$q.notify({
-                        color: 'negative',
-                        position: 'top',
-                        message: 'Loading failed',
-                        icon: 'request ${_URL.QUERY_SUBJECT_LIST} is error'
-                    })
+                    _this.notify({
+                        message: "查询失败",
+                        type: "info",
+                        color: "deep-orange-10"
+                    });
                 })
             },
 
@@ -163,7 +199,7 @@
                     return;
                 }
 
-                _this.$axios.post(_URL.insertSubject, _this.params).then((res) => {
+                _this.$axios.post(_URL.INSERT_SUBJECT_INFO, _this.params).then((res) => {
                     if (res.data["data"] == 1) {
                         if (res.data["errcode"] == 0) {
                             _this.notify({
@@ -182,12 +218,11 @@
                     }
                 }).catch(() => {
                     _this.notify({
-                        message: "修改失败",
+                        message: "新增成功",
                         type: "info",
                         color: "deep-orange-10"
                     });
                 })
-
             },
 
             /**
@@ -195,14 +230,93 @@
              * @author: lifei
              * @date: 2020/3/9
              */
-            stepToEdit() {
-                alert("edit");
+            stepToEdit(item) {
+                let _this = this;
+                _this.isShowEdit = true;
+                _this.currentItem = item;
             },
 
-            stepToDelete() {
-                alert("delete");
+            stepToDelete(item) {
+                let _this = this;
+                _this.isShowDelete = true;
+                _this.currentItem = item;
             },
 
+
+            stepToFixSubject() {
+                let _this = this;
+                if (!_this.fixedName) {
+                    _this.notify({
+                        message: "请输入正确的回向名称",
+                        type: "info",
+                        color: "deep-orange-10"
+                    });
+                    return;
+                }
+                _this.$axios.post(_URL.UPDATE_SUBJECT_INFO, {
+                    id: _this.currentItem["id"],
+                    name: _this.fixedName
+                }).then((res) => {
+                    if (res.data["data"] == 1) {
+                        _this.notify({
+                            message: "修改成功",
+                            type: "info",
+                            color: "teal-5"
+                        });
+                        _this.initMoudleList();
+                        _this.isShowEdit = false;
+                    } else {
+                        _this.notify({
+                            message: "修改失败",
+                            type: "info",
+                            color: "deep-orange-10"
+                        });
+                    }
+                }).catch(() => {
+                    _this.notify({
+                        message: "修改失败",
+                        type: "info",
+                        color: "deep-orange-10"
+                    });
+                })
+            },
+
+            stepToDeleteSubject() {
+                let _this = this;
+                _this.$axios.post(_URL.DELETE_SUBJECT_INFO, _this.currentItem).then((res) => {
+                    if (res.data["data"] == 1) {
+                        _this.notify({
+                            message: "删除成功",
+                            type: "info",
+                            color: "teal-5"
+                        });
+                        _this.isShowDelete = false;
+                        _this.initMoudleList();
+                    } else {
+                        _this.notify({
+                            message: "删除失败",
+                            type: "info",
+                            color: "deep-orange-10"
+                        });
+                    }
+                }).catch(() => {
+                    _this.notify({
+                        message: "删除失败",
+                        type: "info",
+                        color: "deep-orange-10"
+                    });
+                })
+            },
+            /**
+             * @Description: 弹框取消
+             * @author: lifei
+             * @date: 2020/3/12
+             */
+            stepToCancle() {
+                let _this = this;
+                _this.isShowEdit = false;
+                _this.isShowDelete = false;
+            },
             notify(options) {
                 let _this = this;
                 _this.$q.notify({
@@ -359,5 +473,9 @@
         width: 98%;
     }
 
+    .q-card {
+        background: #8a3114;
+        color: #fff;
+    }
 
 </style>
