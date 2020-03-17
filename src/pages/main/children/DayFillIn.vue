@@ -30,14 +30,14 @@
                             <template v-slot:append>
                                 <q-icon name="event" class="cursor-pointer">
                                     <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                                        <q-date v-model="date" @input="() => $refs.qDateProxy.hide()"></q-date>
+                                        <q-date v-model="params.fillDate"
+                                                @input="() => $refs.qDateProxy.hide()"></q-date>
                                     </q-popup-proxy>
                                 </q-icon>
                             </template>
                         </q-input>
                     </q-item-section>
                 </q-item>
-
                 <q-item tag="div">
                     <q-item-section avatar style="width: 35%;">
                         <q-item-label>科目一数量</q-item-label>
@@ -45,13 +45,16 @@
                     <q-item-section avatar style="width: 65%;height:100%;padding: 0;">
                         <div style="width: 100%;height:100%;padding: 0; display: flex;flex-direction: row;justify-content: space-between;">
                             <div style="height:100%;width: 68%;">
-                                <q-input style="width: 100%;height: 100%;" square filled v-model="params.subject1">
+                                <q-input style="width: 100%;height: 100%;" square filled
+                                         v-model="selectSubject[0].subjectName"
+                                         readonly
+                                >
                                 </q-input>
                             </div>
                             <div style="height:100%;width: 30%;">
                                 <q-input style="width: 100%;height: 100%;"
                                          square filled
-                                         v-model="params.times1"
+                                         v-model="selectSubject[0].signAmount"
                                          type="text"
                                          label="次数"
                                          lazy-rules
@@ -68,13 +71,15 @@
                     <q-item-section avatar style="width: 65%;height:100%;padding: 0;">
                         <div style="width: 100%;height:100%;padding: 0; display: flex;flex-direction: row;justify-content: space-between;">
                             <div style="height:100%;width: 68%;">
-                                <q-input style="width: 100%;height: 100%;" square filled v-model="params.subject2">
+                                <q-input style="width: 100%;height: 100%;" square filled
+                                         v-model="selectSubject[1].subjectName"
+                                         readonly>
                                 </q-input>
                             </div>
                             <div style="height:100%;width: 30%;">
                                 <q-input style="width: 100%;height: 100%;"
                                          square filled
-                                         v-model="params.times2"
+                                         v-model="selectSubject[1].signAmount"
                                          type="text"
                                          label="次数"
                                          lazy-rules
@@ -91,13 +96,16 @@
                     <q-item-section avatar style="width: 65%;height:100%;padding: 0;">
                         <div style="width: 100%;height:100%;padding: 0; display: flex;flex-direction: row;justify-content: space-between;">
                             <div style="height:100%;width: 68%;">
-                                <q-input style="width: 100%;height: 100%;" square filled v-model="params.subject3">
+                                <q-input style="width: 100%;height: 100%;" square filled
+                                         v-model="selectSubject[2].subjectName"
+                                         readonly
+                                >
                                 </q-input>
                             </div>
                             <div style="height:100%;width: 30%;">
                                 <q-input style="width: 100%;height: 100%;"
                                          square filled
-                                         v-model="params.times3"
+                                         v-model="selectSubject[2].signAmount"
                                          type="text"
                                          label="次数"
                                          lazy-rules
@@ -168,6 +176,7 @@
                 fillHeaders: ["No.", "法名/网名", "共修科目1", "共修科目2", "共修科目3", "详情"],
                 fillDetails: [],
                 isShowReturn: false,
+                selectSubject: [],
                 params: {
                     mageName: "",
                     subject1: "",
@@ -187,6 +196,34 @@
         },
         methods: {
             init() {
+                this.initSelectSubject()
+            },
+
+            /**
+             * @Description: 初始化共修课目
+             * @author: lifei
+             * @date: 2020/2/22
+             */
+            initSelectSubject() {
+                let _this = this;
+                _this.$axios.get(_URL.QUERY_SUBJECT_SELECT + "/" + 1).then(res => {
+                    if (!res || !res["data"] || res["data"].errcode != 0) return;
+                    _this.selectSubject = res["data"]["data"];
+                    _this.selectSubject.sort(function (a, b) {
+                        return a.subjectSort - b.subjectSort;
+                    });
+
+                    debugger;
+                }).catch(err => {
+                    //do nothong
+                });
+            },
+            /**
+             * @Description: 初始化共修排名榜 共修详情
+             * @author: lifei
+             * @date: 2020/2/22
+             */
+            initTotalUserStudy() {
                 let _this = this;
                 _this.$axios.get(_URL.QUERY_FILL_DETAILS).then(res => {
                     if (res.errcode != 0 && !res.data) return;
@@ -195,15 +232,6 @@
                     //do nothong
                 });
             },
-            /**
-             * @Description: 初始化共修功课种类
-             * @author: lifei
-             * @date: 2020/2/22
-             */
-            initSubjectList() {
-                let _this = this;
-            },
-
             /**
              * @Description: 功德回向控制
              * @author: lifei

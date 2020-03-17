@@ -103,7 +103,12 @@
                 },
                 fixedName: "",
                 meritsHeaders: ["No.", "回向名称", "编辑"],
-                meritsList: []
+                meritsList: [],
+                subjects: [
+                    {subjectId: "", subjectName: "", targetAmount: "", subjectSort: "1", subjectPeriod: "1"},
+                    {subjectId: "", subjectName: "", targetAmount: "", subjectSort: "2", subjectPeriod: "1"},
+                    {subjectId: "", subjectName: "", targetAmount: "", subjectSort: "3", subjectPeriod: "1"}
+                ],
             }
         },
         mounted() {

@@ -17,4 +17,7 @@ export const _URL = {
     QUERY_ALL_PROVINCE: IP + "/main/queryAllProvince",
     QUERY_CITY_BY_PID: IP + "/main/queryCityByPid",
     QUERY_COUNTRY_BY_CITYID: IP + "/main/queryCountryByCityId",
+    //课程选择
+    SUBMIT_SUBJECT_SELECT: IP + "/main/submitSubjcet",
+    QUERY_SUBJECT_SELECT: IP + "/main/querySubjectSelect",
 };

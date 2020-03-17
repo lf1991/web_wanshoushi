@@ -22,9 +22,9 @@
                         <q-item-label>订课期限</q-item-label>
                     </q-item-section>
                     <q-item-section avatar style="width: 65%;height:100%;padding: 0;">
-                        <q-radio v-model="params.selectType" val="year" label="年"/>
-                        <q-radio v-model="params.selectType" val="month" label="月"/>
-                        <q-radio v-model="params.selectType" val="week" label="周"/>
+                        <q-radio v-model="params.selectType" val="3" label="年"/>
+                        <q-radio v-model="params.selectType" val="2" label="月"/>
+                        <q-radio v-model="params.selectType" val="1" label="周"/>
                     </q-item-section>
                 </q-item>
                 <q-item clickable tag="div">
@@ -35,18 +35,16 @@
                         <div style="width: 100%;height:100%;padding: 0; display: flex;flex-direction: row;justify-content: space-between;">
                             <div style="height:100%;width: 68%;">
                                 <q-input style="width: 100%;height: 100%;" square filled bottom-slots
-                                         v-model="selectSubject[0].name "
+                                         v-model="selectSubject[0].subjectName"
+                                         readonly
                                          label="名称">
-                                    <template v-slot:append>
-                                        <q-icon name="close" @click="selectSubject[0].name = ''"
-                                                class="cursor-pointer"/>
-                                    </template>
+
                                 </q-input>
                             </div>
                             <div style="height:100%;width: 30%;">
                                 <q-input style="width: 100%;height: 100%;"
                                          square filled
-                                         v-model="selectSubject[0].target "
+                                         v-model="selectSubject[0].targetAmount "
                                          type="text"
                                          label="目标"
                                          lazy-rules
@@ -65,18 +63,15 @@
                         <div style="width: 100%;height:100%;padding: 0; display: flex;flex-direction: row;justify-content: space-between;">
                             <div style="height:100%;width: 68%;">
                                 <q-input style="width: 100%;height: 100%;" square filled bottom-slots
-                                         v-model="selectSubject[1].name"
+                                         v-model="selectSubject[1].subjectName"
+                                         readonly
                                          label="名称">
-                                    <template v-slot:append>
-                                        <q-icon name="close" @click="selectSubject[1].name = ''"
-                                                class="cursor-pointer"/>
-                                    </template>
                                 </q-input>
                             </div>
                             <div style="height:100%;width: 30%;">
                                 <q-input style="width: 100%;height: 100%;"
                                          square filled
-                                         v-model="selectSubject[1].target"
+                                         v-model="selectSubject[1].targetAmount"
                                          type="text"
                                          label="目标"
                                          lazy-rules
@@ -94,17 +89,19 @@
                     <q-item-section avatar style="width: 65%;height:100%;padding: 0;">
                         <div style="width: 100%;height:100%;padding: 0; display: flex;flex-direction: row;justify-content: space-between;">
                             <div style="height:100%;width: 68%;">
-                                <q-input style="width: 100%;height: 100%;" square filled v-model="selectSubject[2].name"
+                                <q-input style="width: 100%;height: 100%;" square filled
+                                         v-model="selectSubject[2].subjectName"
+                                         readonly
                                          label="名称">
-                                    <template v-slot:append>
-                                        <q-icon name="close" @click="selectSubject[2].name = ''"/>
-                                    </template>
+                                    <!--<template v-slot:append>
+                                        <q-icon name="close" @click="selectSubject[2].subjectName = ''"/>
+                                    </template>-->
                                 </q-input>
                             </div>
                             <div style="height:100%;width: 30%;">
                                 <q-input style="width: 100%;height: 100%;"
                                          square filled
-                                         v-model="selectSubject[2].target"
+                                         v-model="selectSubject[2].targetAmount"
                                          type="text"
                                          label="目标"
                                          lazy-rules
@@ -154,6 +151,10 @@
                         </div>
                     </q-item-section>
                 </q-item>
+
+                <div class="_submit_">
+                    <q-btn class="_submit_button" label="提交" v-on:click="stepToSubmit()"/>
+                </div>
             </div>
 
             <div class="q-pa-md _select_tips">
@@ -212,19 +213,12 @@
                 text: "",
                 params: {
                     mageName: "",
-                    selectType: "",
-                    subject1: "",
-                    target1: "",
-                    subject2: "",
-                    target2: "",
-                    subject3: "",
-                    target3: "",
-
+                    selectType: "1",
                 },
                 selectSubject: [
-                    {id: "", name: "", target: 0},
-                    {id: "", name: "", target: 0},
-                    {id: "", name: "", target: 0}
+                    {subjectId: "", subjectName: "", targetAmount: "", subjectSort: "1", subjectPeriod: "1"},
+                    {subjectId: "", subjectName: "", targetAmount: "", subjectSort: "2", subjectPeriod: "1"},
+                    {subjectId: "", subjectName: "", targetAmount: "", subjectSort: "3", subjectPeriod: "1"}
                 ],
 
 
@@ -254,8 +248,8 @@
                     for (let key in _this.subjecSelects) {
                         let existId = _this.subjecSelects[key];
                         newVal.map(item => {
-                            let currentName = item["name"];
-                            let currentId = item["id"];
+                            let currentName = item["subjectName"];
+                            let currentId = item["subjectId"];
                             if (currentName == "" && currentId === existId) {//不存在了
                                 _this.subjecSelects.splice(key, 1);
                             }
@@ -387,8 +381,7 @@
                     _this.$q.notify({
                         color: 'negative',
                         position: 'top',
-                        message: 'Loading failed',
-                        icon: 'request ${_URL.QUERY_COUNTRY_BY_CITYID} is error'
+                        message: 'request ${_URL.QUERY_COUNTRY_BY_CITYID} is error',
                     })
                 })
             },
@@ -402,9 +395,9 @@
                 let _this = this, noExistId = -1;
                 if (!_this.subjecSelects.length) {
                     _this.selectSubject.map((itemMM, postion) => {
-                        itemMM["name"] = "";
-                        itemMM["id"] = "";
-                        itemMM["target"] = "";
+                        itemMM["subjectName"] = "";
+                        itemMM["subjectId"] = "";
+                        itemMM["targetAmount"] = "";
                     });
                     return;
                 }
@@ -413,16 +406,17 @@
                 _this.subjecSelects.map((id, index) => {
                     let idIndex = index + 1;
                     _this.selectSubject.map((itemMM, postion) => {
-                        let selectId = itemMM["id"];
+                        let selectId = itemMM["subjectId"];
                         if (_this.subjecSelects.indexOf(selectId) == -1) {//不存在
-                            itemMM["name"] = "";
-                            itemMM["id"] = "";
-                            itemMM["target"] = "";
+                            itemMM["subjectName"] = "";
+                            itemMM["subjectId"] = "";
+                            itemMM["targetAmount"] = "";
                         }
                     });
                 });
 
-                let id0 = _this.selectSubject[0].id, id1 = _this.selectSubject[1].id, id2 = _this.selectSubject[2].id;
+                let id0 = _this.selectSubject[0].subjectId, id1 = _this.selectSubject[1].subjectId,
+                    id2 = _this.selectSubject[2].subjectId;
                 //数据填充
                 _this.subjectList.map(subject => {
                     let subjectId = subject.id;
@@ -441,14 +435,14 @@
                                 continue;
                             }
                             if (id0 == "") {
-                                _this.selectSubject[0].id = subject["id"];
-                                _this.selectSubject[0].name = subject["name"];
+                                _this.selectSubject[0].subjectId = subject["id"];
+                                _this.selectSubject[0].subjectName = subject["name"];
                             } else if (id1 == "") {
-                                _this.selectSubject[1].id = subject["id"];
-                                _this.selectSubject[1].name = subject["name"];
+                                _this.selectSubject[1].subjectId = subject["id"];
+                                _this.selectSubject[1].subjectName = subject["name"];
                             } else if (id2 == "") {
-                                _this.selectSubject[2].id = subject["id"];
-                                _this.selectSubject[2].name = subject["name"];
+                                _this.selectSubject[2].subjectId = subject["id"];
+                                _this.selectSubject[2].subjectName = subject["name"];
                             }
                         }
                     }
@@ -460,11 +454,45 @@
              * @author: lifei
              * @date: 2020/2/23
              */
-            doSubmit() {
-                alert("ok");
+            stepToSubmit() {
+                let _this = this;
+
+                let isOK = true, errMessage = "";
+                _this.selectSubject.map((item, index) => {
+                    item["subjectPeriod"] = _this.params["selectType"];
+                    if (!item["subjectName"] || !item["subjectId"]) {
+                        isOK = false;
+                        errMessage = "请您正确选择课目"
+                    } else if (!item["targetAmount"]) {
+                        isOK = false;
+                        errMessage = "请您正确输入需要共修课目目标次数"
+                    }
+                });
+
+                if (!isOK) {
+                    _this.$q.notify({
+                        color: 'negative',
+                        position: 'top',
+                        message: errMessage,
+                    });
+                    return;
+                }
+
+
+                _this.$axios.post(_URL.SUBMIT_SUBJECT_SELECT, _this.selectSubject).then((res) => {
+                    let dataTT = res.data;
+                    if (dataTT.errode != 0 && !dataTT.data) return;
+                    _this.countyOptions = dataTT.data;
+                }).catch(() => {
+                    _this.$q.notify({
+                        color: 'negative',
+                        position: 'top',
+                        message: 'Loading failed',
+                        icon: 'request ${_URL.QUERY_COUNTRY_BY_CITYID} is error'
+                    })
+                })
             }
-        }
-        ,
+        },
         destroyed() {
         }
     }
@@ -508,6 +536,20 @@
                 @include flex(row);
                 font-size: 18px;
             }
+        }
+    }
+
+    ._submit_ {
+        width: 100%;
+        height: auto;
+        @include flex();
+
+        ._submit_button {
+            height: 70%;
+            background: #A14407;
+            min-width: 50%;
+            color: #fff;
+            font-size: 18px;
         }
     }
 
